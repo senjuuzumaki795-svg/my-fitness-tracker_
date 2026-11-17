@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123d32">
+<title>My Fitness Tracker</title>
+<style>
+:root{--green:#176b52;--deep:#123d32;--mint:#e8f5ef;--bg:#f4f7f5;--ink:#17251f;--muted:#68776f;--line:#e2eae5;--white:#fff;--orange:#f3a64a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}header{background:linear-gradient(120deg,#123d32,#20775b);color:white;padding:25px max(18px,calc((100% - 1120px)/2)) 28px}header h1{margin:0 0 7px;font-size:27px}header p{margin:0;color:#d9eee5;font-size:14px}.wrap{max-width:1120px;margin:22px auto;padding:0 16px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.tab{border:1px solid var(--line);background:white;color:var(--deep);padding:11px 15px;border-radius:12px;font-weight:700;cursor:pointer}.tab.active{background:var(--deep);color:white}.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.card{background:white;border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:0 4px 16px #193c2b08}.card h2,.card h3{margin:0 0 12px}.card h2{font-size:19px}.card h3{font-size:16px}.muted,.hint{color:var(--muted);font-size:13px;line-height:1.5}.metric{font-size:30px;font-weight:800;color:var(--deep);margin:6px 0}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:10px}.field{margin:10px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px;font-weight:700}input,select{width:100%;padding:11px;border:1px solid #ccd9d1;border-radius:10px;font-size:15px;background:white;color:var(--ink)}button{border:0;border-radius:10px;padding:11px 14px;background:var(--green);color:white;font-weight:700;cursor:pointer}button.secondary{background:var(--mint);color:var(--deep)}button.danger{background:#fff0ed;color:#a43e2e}button:active{transform:scale(.98)}.full{width:100%}.progress{height:10px;border-radius:20px;background:#e7eee9;overflow:hidden;margin:10px 0}.progress span{display:block;height:100%;background:#35a477;width:0}.foodlist{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.food{background:#f3f8f5;border-radius:10px;padding:10px;font-size:13px}.exercise-tools{display:grid;grid-template-columns:1fr 180px;gap:10px;margin-bottom:14px}.exercise-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.exercise{padding:0;overflow:hidden}.exercise-art{height:142px;background:linear-gradient(135deg,#e4f3eb,#f5f8f4);display:flex;align-items:center;justify-content:center;position:relative}.exercise-art svg{width:105px;height:105px}.exercise-body{padding:14px}.exercise-body h3{margin:0 0 5px}.tag{display:inline-block;background:#edf6f0;color:#246348;border-radius:20px;padding:5px 8px;font-size:11px;font-weight:700;margin:2px 3px 6px 0}.exercise-body p{font-size:12px;color:var(--muted);line-height:1.45;min-height:34px}.exercise-body .row{justify-content:space-between}.small{font-size:12px}.summary{background:var(--mint);border-radius:12px;padding:12px;margin-top:10px}.notice{background:#fff7e9;border:1px solid #f4dfb9;padding:12px;border-radius:12px;color:#70501d;font-size:13px;line-height:1.5;margin:12px 0}.history{padding-left:18px;color:var(--muted);font-size:13px}.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.exercise-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.exercise-tools{grid-template-columns:1fr}header h1{font-size:23px}}
+@media(max-width:420px){.exercise-grid{grid-template-columns:1fr 1fr}.exercise-art{height:115px}.exercise-art svg{width:85px;height:85px}.exercise-body{padding:11px}}
+</style>
+</head>
+<body>
+<header><h1>🌿 My Fitness Tracker</h1><p>Your simple home fitness companion · Save your progress on this device</p></header>
+<main class="wrap">
+<nav class="tabs">
+<button class="tab active" data-tab="dashboard">Dashboard</button>
+<button class="tab" data-tab="exercises">Exercise Library</button>
+<button class="tab" data-tab="food">Food & Calories</button>
+<button class="tab" data-tab="progress">My Progress</button>
+</nav>
+
+<section id="dashboard" class="panel active">
+<div class="grid">
+<div class="card"><div class="between"><h2>Today's activity</h2><span>👟</span></div>
+<div class="field"><label>Steps today</label><input id="steps" type="number" min="0" placeholder="Enter today's steps"></div>
+<div class="metric" id="stepsOut">0</div><div class="muted">steps · about <b id="distanceOut">0.00 km</b></div>
+<div class="progress"><span id="stepBar"></span></div><div class="hint">Daily step goal: 8,000 steps. Enter the number shown by your phone.</div></div>
+<div class="card"><div class="between"><h2>Water tracker</h2><span>💧</span></div>
+<div class="metric"><span id="waterOut">0</span><small style="font-size:15px"> / 8 glasses</small></div><div class="progress"><span id="waterBar"></span></div>
+<div class="row"><button onclick="changeWater(-1)" class="secondary">−</button><button onclick="changeWater(1)">+ Add a glass</button><button onclick="setWater(0)" class="secondary">Reset</button></div><p class="hint">One glass is counted as approximately 250 ml. Adjust based on your needs.</p></div>
+<div class="card"><h2>Workout today</h2><p class="muted">Choose an exercise from the library and mark it complete. Your workout calories are estimates.</p>
+<div class="metric" id="workoutCount">0</div><div class="muted">exercises completed today</div><div class="summary" id="workoutSummary">No workout recorded yet.</div>
+<button class="secondary full" style="margin-top:12px" onclick="showTab('exercises')">Open exercise library</button></div>
+<div class="card"><h2>Daily calorie estimate</h2><div class="row" style="justify-content:space-between"><span class="muted">Estimated daily burn</span><b id="burnOut">— kcal</b></div><div class="row" style="justify-content:space-between;margin-top:8px"><span class="muted">Food consumed</span><b id="foodOut">— kcal</b></div><div class="row" style="justify-content:space-between;margin-top:8px"><span class="muted">Estimated balance</span><b id="balanceOut">— kcal</b></div><p class="hint">Estimates only; not a medical measurement. Steps are not added separately to avoid double-counting.</p><button class="secondary full" onclick="showTab('food')">Update food & calorie details</button></div>
+</div>
+</section>
+
+<section id="exercises" class="panel">
+<div class="between" style="margin-bottom:12px"><div><h2 style="margin:0">Exercise Library</h2><p class="muted" style="margin:5px 0">Beginner-friendly home exercises with simple illustrations, sets and reps.</p></div></div>
+<div class="exercise-tools"><input id="exerciseSearch" placeholder="Search exercises..." oninput="renderExercises()"><select id="exerciseCategory" onchange="renderExercises()"><option value="All">All categories</option><option>Cardio</option><option>Strength</option><option>Core</option><option>Lower body</option><option>Upper body</option><option>Stretching</option></select></div>
+<div id="exerciseGrid" class="exercise-grid"></div>
+<div class="notice">Safety tip: Start slowly, use a comfortable range of motion, and stop if you feel pain, dizziness or unusual breathlessness. Use a stable chair and clear floor space where needed.</div>
+</section>
+
+<section id="food" class="panel">
+<div class="grid">
+<div class="card"><h2>Calorie calculator</h2><p class="muted">Edit your details to improve the estimate.</p>
+<div class="grid">
+<div class="field"><label>Age (years)</label><input id="age" type="number" min="13" max="100" value="19"></div>
+<div class="field"><label>Sex used for formula</label><select id="sex"><option value="female">Female</option><option value="male">Male</option></select></div>
+<div class="field"><label>Height (cm)</label><input id="height" type="number" min="100" max="230" value="152"></div>
+<div class="field"><label>Weight (kg)</label><input id="weight" type="number" min="30" max="300" value="70"></div>
+</div>
+<div class="field"><label>Daily activity outside workouts</label><select id="activity"><option value="1.2">Mostly sitting (1.2)</option><option value="1.375">Light activity (1.375)</option><option value="1.55">Moderate activity (1.55)</option><option value="1.725">Very active (1.725)</option></select></div>
+<div class="summary"><div class="row between"><span>BMR estimate</span><b id="bmrOut">—</b></div><div class="row between"><span>Baseline daily burn</span><b id="baselineOut">—</b></div><div class="row between"><span>Workout burn today</span><b id="exerciseBurnOut">—</b></div></div>
+<button style="margin-top:12px" class="full" onclick="saveProfile()">Save profile & calculate</button></div>
+<div class="card"><h2>Food calories</h2><p class="muted">Enter your total calories eaten so far today (not just the latest meal).</p>
+<div class="field"><label>Total food calories today</label><input id="foodCalories" type="number" min="0" placeholder="Example: 1500"></div><button class="full" onclick="saveFood()">Save today's food total</button>
+<div class="notice">Food-photo selection is not food recognition. This offline version does not scan a meal or calculate calories from a picture. Check portions and ingredients using a reliable food database before entering an estimate.</div></div>
+</div>
+<div class="card" style="margin-top:15px"><h2>Indian meal ideas</h2><div class="foodlist">
+<div class="food"><b>Breakfast</b><br>Idli with sambar · vegetable poha · oats</div><div class="food"><b>Lunch</b><br>Roti, dal and vegetables · rice with chicken</div><div class="food"><b>Snack</b><br>Fruit · roasted chana · plain yogurt</div><div class="food"><b>Dinner</b><br>Paneer with roti · dal and vegetables · curd rice</div>
+</div><p class="hint">Choose portions that suit your hunger, activity and dietary needs. No single meal is compulsory.</p></div>
+</section>
+
+<section id="progress" class="panel">
+<div class="grid">
+<div class="card"><h2>Weight progress</h2><div class="field"><label>Today's weight (kg)</label><input id="weightEntry" type="number" min="30" max="300" step=".1" placeholder="Example: 70.0"></div><button onclick="addWeight()" class="full">Save weight</button><ul id="weightHistory" class="history"></ul></div>
+<div class="card"><h2>Data & privacy</h2><p class="muted">Your entries are saved in this browser on this device. Clearing browser data may erase them.</p><button class="full" onclick="exportData()">Export my data (JSON)</button><button class="danger full" style="margin-top:9px" onclick="resetData()">Reset all app data</button></div>
+</div>
+</section>
+</main>
+<footer>My Fitness Tracker · Personal estimates only · Keep moving at your own pace</footer>
+
+<script>
+const KEY='myFitnessTrackerComplete1';
+const defaults={steps:0,water:0,food:0,profile:{age:19,sex:'female',height:152,weight:70,activity:1.2},weights:[],completed:[],day:new Date().toDateString()};
+let data=loadData();
+function loadData(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')};}catch(e){return {...defaults};}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(data));}
+function todayReset(){let now=new Date().toDateString();if(data.day!==now){data.day=now;data.steps=0;data.water=0;data.food=0;data.completed=[];persist();}}
+const exercises=[
+['March in place','Cardio','Warm up and raise your knees alternately while swinging your arms.','3 rounds','45 sec','30 sec','🚶'],
+['Jumping jacks','Cardio','Jump feet apart as arms lift overhead; step instead of jumping for low impact.','3 rounds','30 sec','30 sec','🤸'],
+['Step touch','Cardio','Step side to side, bringing the other foot in; move arms naturally.','3 rounds','45 sec','20 sec','💃'],
+['High knees (low impact)','Cardio','March briskly, lifting knees one at a time without jumping.','3 rounds','30 sec','30 sec','🏃'],
+['Shadow boxing','Cardio','Punch forward gently, alternating arms while keeping knees soft.','3 rounds','40 sec','30 sec','🥊'],
+['Bodyweight squat','Lower body','Sit hips back as if reaching for a chair; keep knees tracking over toes.','3 sets','10–12 reps','45 sec','🏋️'],
+['Dumbbell goblet squat','Lower body','Hold one dumbbell close to your chest and squat to a comfortable depth.','3 sets','10 reps','60 sec','🏋️'],
+['Glute bridge','Lower body','Lie on your back, knees bent; squeeze glutes and lift hips, then lower slowly.','3 sets','12 reps','45 sec','🌉'],
+['Reverse lunge','Lower body','Step one foot back and lower gently; hold a wall for balance if needed.','2 sets','8 each leg','60 sec','🦵'],
+['Calf raises','Lower body','Hold a chair and rise onto your toes, pause, then lower slowly.','3 sets','15 reps','30 sec','🦶'],
+['Wall push-up','Upper body','Place hands on wall, bend elbows to bring chest closer, then push away.','3 sets','10–12 reps','45 sec','💪'],
+['Dumbbell shoulder press','Upper body','Press light dumbbells overhead without arching your lower back.','2 sets','10 reps','60 sec','🏋️'],
+['Bent-over dumbbell row','Upper body','Hinge at hips with a straight back; pull weights toward hips and lower slowly.','3 sets','10 reps','60 sec','🚣'],
+['Biceps curl','Upper body','Keep elbows near your sides; curl weights up and lower with control.','2 sets','12 reps','45 sec','💪'],
+['Overhead triceps extension','Upper body','Hold one light dumbbell overhead; bend and straighten elbows carefully.','2 sets','10 reps','60 sec','🙆'],
+['Bird dog','Core','On hands and knees, extend opposite arm and leg; keep hips steady.','2 sets','8 each side','30 sec','🐦'],
+['Dead bug','Core','Lie on back; lower opposite arm and leg slowly while keeping back comfortable.','2 sets','8 each side','30 sec','🧘'],
+['Knee plank','Core','Support yourself on forearms and knees; keep a straight line from head to knees.','3 sets','15–25 sec','45 sec','🧘'],
+['Standing side bend','Core','Stand tall and slide one hand down the side of your thigh; alternate sides.','2 sets','10 each side','30 sec','↔️'],
+['Cat-cow stretch','Stretching','On hands and knees, gently round and arch your back with your breath.','2 sets','8 slow reps','20 sec','🐈'],
+['Hamstring stretch','Stretching','Sit or stand with one leg extended; hinge gently until you feel a mild stretch.','2 sets','20 sec each','20 sec','🧎'],
+['Chest opener','Stretching','Clasp hands behind or place arms at sides and gently open your chest.','2 sets','20 sec','20 sec','👐']
+];
+function showTab(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+function workoutCalories(){let p=data.profile;return data.completed.reduce((sum,x)=>sum+(x.kcal||0),0);}
+function calc(){let p=data.profile;let bmr=10*p.weight+6.25*p.height-5*p.age+(p.sex==='male'?5:-161);let base=bmr*p.activity;let burn=base+workoutCalories();let bal=burn-data.food;return {bmr,base,burn,bal};}
+function render(){todayReset();let c=calc();document.getElementById('steps').value=data.steps;document.getElementById('stepsOut').textContent=Number(data.steps).toLocaleString();document.getElementById('distanceOut').textContent=(data.steps*.0007).toFixed(2)+' km';document.getElementById('stepBar').style.width=Math.min(100,data.steps/8000*100)+'%';document.getElementById('waterOut').textContent=data.water;document.getElementById('waterBar').style.width=Math.min(100,data.water/8*100)+'%';document.getElementById('workoutCount').textContent=data.completed.length;document.getElementById('workoutSummary').textContent=data.completed.length?data.completed.map(x=>x.name).join(', '):'No workout recorded yet.';document.getElementById('burnOut').textContent=Math.round(c.burn)+' kcal';document.getElementById('foodOut').textContent=data.food+' kcal';document.getElementById('balanceOut').textContent=(c.bal>=0?'Estimated deficit: ':'Estimated surplus: ')+Math.abs(Math.round(c.bal))+' kcal';document.getElementById('bmrOut').textContent=Math.round(c.bmr)+' kcal/day';document.getElementById('baselineOut').textContent=Math.round(c.base)+' kcal/day';document.getElementById('exerciseBurnOut').textContent=Math.round(workoutCalories())+' kcal';document.getElementById('age').value=data.profile.age;document.getElementById('sex').value=data.profile.sex;document.getElementById('height').value=data.profile.height;document.getElementById('weight').value=data.profile.weight;document.getElementById('activity').value=data.profile.activity;document.getElementById('foodCalories').value=data.food;document.getElementById('weightHistory').innerHTML=data.weights.slice().reverse().map(x=>'<li>'+escapeHtml(x.date)+' — '+x.weight+' kg</li>').join('')||'<li>No weight entries yet.</li>';}
+function changeWater(n){data.water=Math.max(0,Math.min(30,data.water+n));persist();render()}function setWater(n){data.water=n;persist();render()}
+document.getElementById('steps').addEventListener('change',e=>{data.steps=Math.max(0,Number(e.target.value)||0);persist();render()});
+function saveProfile(){let p={age:+document.getElementById('age').value,sex:document.getElementById('sex').value,height:+document.getElementById('height').value,weight:+document.getElementById('weight').value,activity:+document.getElementById('activity').value};if(!p.age||!p.height||!p.weight){alert('Please enter valid age, height and weight.');return;}data.profile=p;persist();render();alert('Profile saved.');}
+function saveFood(){data.food=Math.max(0,Math.round(Number(document.getElementById('foodCalories').value)||0));persist();render();alert('Food total saved.');}
+function addWeight(){let w=Number(document.getElementById('weightEntry').value);if(!w||w<30||w>300){alert('Please enter a valid weight in kg.');return;}data.profile.weight=w;data.weights.push({date:new Date().toLocaleDateString(),weight:w});persist();document.getElementById('weightEntry').value='';render();}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderExercises(){let q=(document.getElementById('exerciseSearch').value||'').toLowerCase();let cat=document.getElementById('exerciseCategory').value;let list=exercises.map((e,i)=>({e,i})).filter(({e})=>(cat==='All'||e[1]===cat)&&e[0].toLowerCase().includes(q));document.getElementById('exerciseGrid').innerHTML=list.map(({e,i})=>`<article class="card exercise"><div class="exercise-art"><svg viewBox="0 0 120 120" role="img" aria-label="${escapeHtml(e[0])} illustration"><circle cx="60" cy="22" r="11" fill="#e4a77d"/><path d="M49 36 Q60 30 71 36 L78 68 L68 72 L64 52 L56 52 L52 72 L42 68Z" fill="#23765a"/><path d="M49 39 L31 57 L36 62 L54 48 M71 39 L89 57 L84 62 L66 48" fill="none" stroke="#e4a77d" stroke-width="8" stroke-linecap="round"/><path d="M53 70 L43 99 M67 70 L78 99" stroke="#244b3c" stroke-width="10" stroke-linecap="round"/><path d="M34 101 H48 M72 101 H86" stroke="#244b3c" stroke-width="5" stroke-linecap="round"/><circle cx="60" cy="22" r="11" fill="none" stroke="#b87955" stroke-width="1"/></svg></div><div class="exercise-body"><h3>${escapeHtml(e[0])}</h3><span class="tag">${escapeHtml(e[1])}</span><p>${escapeHtml(e[2])}</p><div class="row small"><b>${e[3]} · ${e[4]}</b><span>Rest ${e[5]}</span></div><button class="full" style="margin-top:10px" onclick="completeExercise(${i})">Mark complete</button></div></article>`).join('')||'<p class="muted">No exercises found. Try another search.</p>';}
+function completeExercise(i){let e=exercises[i];let mins=parseDuration(e[4]);let met=e[1]==='Cardio'?4.5:(e[1]==='Strength'||e[1]==='Upper body'||e[1]==='Lower body'?3.5:2.5);let kcal=met*3.5*data.profile.weight/200*mins;data.completed.push({name:e[0],kcal:Math.round(kcal),time:new Date().toLocaleTimeString()});persist();render();alert(e[0]+' marked complete! Estimated calories: '+Math.round(kcal)+' kcal.');}
+function parseDuration(s){if(s.includes('sec'))return 1;if(s.includes('20 sec'))return 1;if(s.includes('15–25'))return 1;if(s.includes('reps'))return 3;return 3;}
+function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-fitness-tracker-data.json';a.click();URL.revokeObjectURL(a.href);}
+function resetData(){if(confirm('Delete all saved tracker data from this browser?')){localStorage.removeItem(KEY);data={...defaults,profile:{...defaults.profile},weights:[],completed:[],day:new Date().toDateString()};persist();render();}}
+render();renderExercises();
+</script>
+</body>
+</html>
